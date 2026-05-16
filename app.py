@@ -80,6 +80,7 @@ if not uploaded:
     st.stop()
 
 # ── Load CSV  ─────────────────────────────────────────────────────────
+df_raw = None
 try:
     df_raw, enc, enc_warn = load_csv(uploaded)
 except ValueError as e:
@@ -113,6 +114,8 @@ with tab1:
     prev_target = st.session_state.get("target")
 
     target = st.selectbox(" Select Target Column", df_raw.columns)
+    if target is None:
+        st.stop()
 
     # Reset state if target changed
     if prev_target and prev_target != target:
@@ -120,6 +123,8 @@ with tab1:
 
     problem_type = detect_problem_type(df_raw, target)
     st.info(f" Detected problem type: **{problem_type}**")
+
+    
 
     split = st.slider(
         "Train Size (%)",
@@ -139,6 +144,12 @@ with tab1:
         "unique":  df_raw.nunique(),
     })
     st.dataframe(col_info, use_container_width=True)
+
+    from sklearn.preprocessing import LabelEncoder
+
+    if df_raw[target].dtype == "object":
+        le = LabelEncoder()
+        df_raw[target] = le.fit_transform(df_raw[target])
 
 
 
@@ -202,8 +213,9 @@ with tab3:
     if mode == "manual":
         st.markdown("#### Select Algorithm")
         selected_name      = st.selectbox("Algorithm", list(model_dict.keys()))
-        selected_model_key = model_dict[selected_name]
-        st.info(f"Selected: **{selected_name}**")
+        if selected_name:
+            selected_model_key = model_dict[selected_name]
+            st.info(f"Selected: **{selected_name}**")
 
     st.divider()
 
