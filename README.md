@@ -6,7 +6,7 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.35-red?logo=streamlit&logoColor=white)
 ![PyCaret](https://img.shields.io/badge/PyCaret-3.3.2-green)
 ![Optuna](https://img.shields.io/badge/Optuna-3.6.1-purple)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+
 
 ---
 
